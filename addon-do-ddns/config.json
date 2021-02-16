@@ -1,0 +1,21 @@
+{
+  "name": "Digitalocean DDNS",
+  "version": "2021.10.0",
+  "slug": "do-ddns",
+  "description": "Automatically updates Digitalocean DNS records for given domains",
+  "arch": ["amd64"],
+  "url": "https://github.com/CristianHenzel/hassio-addons",
+  "startup": "application",
+  "boot": "auto",
+  "options": {
+    "api_token": null,
+    "domains": "hass@example.com,home@example2.com",
+    "log_level": "info"
+  },
+  "schema": {
+    "api_token": "password",
+    "domains": "str",
+    "log_level": "list(trace|debug|info|notice|warning|error|fatal)"
+  },
+  "image": "hecristi/addon-do-ddns"
+}
