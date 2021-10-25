@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        addon: [ "addon-auto-backup", "addon-do-ddns", "addon-s3-sync" ]
+        addon: [ "addon-auto-backup", "addon-do-ddns", "addon-samba-sync", "addon-s3-sync" ]
         architecture: [ "amd64" ]
         build_from_image: [ "ubuntu-base" ]
-        build_from_version: [ "6.1.3" ]
+        build_from_version: [ "6.2.1" ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -39,31 +39,3 @@ jobs:
 
       - name: Push
         run: docker push "ghcr.io/cristianhenzel/hassio-${{ matrix.addon }}/${{ matrix.architecture }}:latest"
-
-
-#    - name: Login to DockerHub
-#      uses: docker/login-action@v1
-#      with:
-#        username: ${{ secrets.DH_USER }}
-#        password: ${{ secrets.DH_PAT }}
-#    - name: Publish auto-backup
-#      uses: home-assistant/builder@master
-#      with:
-#        args: |
-#          --amd64 \
-#          --target ${{ matrix.addon }} \
-#          --docker-hub ${{ secrets.DH_USER }}
-#    - name: Publish do-ddns
-#      uses: home-assistant/builder@master
-#      with:
-#        args: |
-#          --amd64 \
-#          --target addon-do-ddns \
-#          --docker-hub ${{ secrets.DH_USER }}
-#    - name: Publish s3-sync
-#      uses: home-assistant/builder@master
-#      with:
-#        args: |
-#          --amd64 \
-#          --target addon-s3-sync \
-#          --docker-hub ${{ secrets.DH_USER }}
