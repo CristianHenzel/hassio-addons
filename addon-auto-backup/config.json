@@ -1,6 +1,6 @@
 {
   "name": "Auto Backup",
-  "version": "2021.10.0",
+  "version": "2021.10.1",
   "slug": "auto-backup",
   "description": "Automatically creates daily full Home Assistant snapshots and removes old ones",
   "arch": ["amd64"],
@@ -17,6 +17,5 @@
   "schema": {
     "log_level": "list(trace|debug|info|notice|warning|error|fatal)",
     "snapshot_keep_days": "int"
-  },
-  "image": "hecristi/addon-auto-backup"
+  }
 }

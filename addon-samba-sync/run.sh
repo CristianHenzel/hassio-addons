@@ -5,13 +5,18 @@ USERNAME=$(bashio::config "username")
 PASSWORD=$(bashio::config "password")
 SYNC_INTERVAL=$(bashio::config "sync_interval")
 
+mkdir -p /share
 echo -e "username=${USERNAME}\npassword=${PASSWORD}" > /etc/cifs.creds
-echo "/cifs /etc/auto.cifs" > /etc/auto.master
-echo "share -fstype=cifs,rw,credentials=/etc/cifs.creds :${SHARE}" > /etc/auto.cifs
-/usr/sbin/automount --pid-file /run/autofs.pid
+
+sync() {
+	mount -t cifs -o rw,credentials=/etc/cifs.creds "${SHARE}" /share || return 1
+	rsync -a --delete /backup/ /share || return 1
+	umount /share || return 1
+	bashio::log.info "Sync finished successfully"
+}
 
 while true; do
-	rsync -a --delete /backup/ /cifs/share || bashio::log.error "Error copying backups to share"
+	sync || bashio::log.error "Error copying backups to share"
 
 	sleep "${SYNC_INTERVAL}"
 done

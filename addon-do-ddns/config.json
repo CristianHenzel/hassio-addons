@@ -1,6 +1,6 @@
 {
   "name": "Digitalocean DDNS",
-  "version": "2021.10.0",
+  "version": "2021.10.1",
   "slug": "do-ddns",
   "description": "Automatically updates Digitalocean DNS records for given domains",
   "arch": ["amd64"],
@@ -16,6 +16,5 @@
     "api_token": "password",
     "domains": "str",
     "log_level": "list(trace|debug|info|notice|warning|error|fatal)"
-  },
-  "image": "hecristi/addon-do-ddns"
+  }
 }

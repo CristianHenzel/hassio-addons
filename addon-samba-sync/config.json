@@ -1,6 +1,6 @@
 {
 	"name": "Samba sync",
-	"version": "2021.10.0",
+	"version": "2021.10.1",
 	"slug": "samba-sync",
 	"description": "Regularly syncs the backup folder to a samba share",
 	"arch": ["amd64"],
@@ -10,13 +10,12 @@
 	"map": ["backup"],
 	"hassio_role": "default",
 	"privileged": ["SYS_ADMIN", "DAC_READ_SEARCH"],
-	"apparmor": false,
 	"options": {
 		"log_level": "info",
 		"share": "//192.168.0.10/samba_share",
 		"username": "samba_user",
 		"password": "samba_pass",
-		"sync_interval": 600
+		"sync_interval": 1800
 	},
 	"schema": {
 		"log_level": "list(trace|debug|info|notice|warning|error|fatal)",
