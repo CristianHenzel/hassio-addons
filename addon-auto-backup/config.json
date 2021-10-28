@@ -1,21 +1,21 @@
 {
-  "name": "Auto Backup",
-  "version": "2021.10.1",
-  "slug": "auto-backup",
-  "description": "Automatically creates daily full Home Assistant snapshots and removes old ones",
-  "arch": ["amd64"],
-  "url": "https://github.com/CristianHenzel/hassio-addons",
-  "startup": "application",
-  "boot": "auto",
-  "map": ["backup"],
-  "hassio_api": true,
-  "hassio_role": "backup",
-  "options": {
-    "log_level": "info",
-    "snapshot_keep_days": 10
-  },
-  "schema": {
-    "log_level": "list(trace|debug|info|notice|warning|error|fatal)",
-    "snapshot_keep_days": "int"
-  }
+	"name": "Auto Backup",
+	"version": "2021.10.1",
+	"slug": "auto-backup",
+	"description": "Automatically creates daily full Home Assistant snapshots and removes old ones",
+	"arch": ["amd64"],
+	"url": "https://github.com/CristianHenzel/hassio-addons",
+	"startup": "application",
+	"boot": "auto",
+	"map": ["backup"],
+	"hassio_api": true,
+	"hassio_role": "backup",
+	"options": {
+		"log_level": "info",
+		"snapshot_keep_days": 10
+	},
+	"schema": {
+		"log_level": "list(trace|debug|info|notice|warning|error|fatal)",
+		"snapshot_keep_days": "int"
+	}
 }
