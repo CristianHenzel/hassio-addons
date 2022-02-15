@@ -17,6 +17,10 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
 
+      - name: Read version
+        run: |
+          echo "addon_version=$(egrep -R 'version:' ${{ matrix.addon }}/config.yaml | awk '{print $2}')" >> ${GITHUB_ENV}
+
       - name: Get base image
         id: build_from
         run: echo "::set-output name=build_from::$(jq -r '.build_from.${{ matrix.architecture }}' ${{ matrix.addon }}/build.json)"
@@ -32,13 +36,13 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           load: true
-          tags: ghcr.io/cristianhenzel/hassio-${{ matrix.addon }}/${{ matrix.architecture }}:latest
+          tags: ghcr.io/cristianhenzel/hassio-${{ matrix.addon }}/${{ matrix.architecture }}:${{ env.addon_version }}
           context: ./${{ matrix.addon }}
           file: ./${{ matrix.addon }}/Dockerfile
           cache-from: |
-            ghcr.io/cristianhenzel/hassio-${{ matrix.addon }}/${{ matrix.architecture }}:latest
+            ghcr.io/cristianhenzel/hassio-${{ matrix.addon }}/${{ matrix.architecture }}:${{ env.addon_version }}
           build-args: |
             BUILD_FROM=${{ steps.build_from.outputs.build_from }}
 
       - name: Push
-        run: docker push "ghcr.io/cristianhenzel/hassio-${{ matrix.addon }}/${{ matrix.architecture }}:latest"
+        run: docker push "ghcr.io/cristianhenzel/hassio-${{ matrix.addon }}/${{ matrix.architecture }}:${{ env.addon_version }}"

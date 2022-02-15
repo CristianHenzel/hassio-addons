@@ -1,0 +1,22 @@
+---
+name: Auto Backup
+version: 2022.7.1
+slug: auto-backup
+description: Automatically creates daily full Home Assistant snapshots and removes old ones
+arch:
+  - amd64
+url: https://github.com/CristianHenzel/hassio-addons
+startup: application
+boot: auto
+init: false
+map:
+  - backup:rw
+hassio_api: true
+hassio_role: backup
+image: ghcr.io/cristianhenzel/hassio-addon-auto-backup/{arch}
+options:
+  log_level: info
+  backup_keep_days: 10
+schema:
+  log_level: list(trace|debug|info|notice|warning|error|fatal)
+  backup_keep_days: int

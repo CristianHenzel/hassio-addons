@@ -1,4 +1,4 @@
-#!/usr/bin/env bashio
+#!/usr/bin/with-contenv bashio
 
 SHARE=$(bashio::config "share")
 USERNAME=$(bashio::config "username")

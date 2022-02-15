@@ -1,27 +1,27 @@
-#!/usr/bin/env bashio
+#!/usr/bin/with-contenv bashio
 
-SNAPSHOT_KEEP_DAYS=$(bashio::config "snapshot_keep_days")
+BACKUP_KEEP_DAYS=$(bashio::config "backup_keep_days")
 NOW=$(date -Iseconds)
-SNAPSHOTS=$(bashio::api.supervisor "GET" "/snapshots" false ".snapshots[]")
+BACKUPS=$(bashio::api.supervisor "GET" "/backups" false ".backups[]")
 
-createsnapshot() {
-	local SNAPSHOTNAME; SNAPSHOTNAME="full-$(date -I)"
+createbackup() {
+	local BACKUPNAME; BACKUPNAME="full-$(date -I)"
 
 	while read -r line; do
 		NAME=$(bashio::jq "${line}" ".name")
-		if [ "${NAME}" = "${SNAPSHOTNAME}" ]; then
-			bashio::log.info "Skipping snapshot creation because snapshot for current date already exists"
+		if [ "${NAME}" = "${BACKUPNAME}" ]; then
+			bashio::log.info "Skipping backup creation because backup for current date already exists"
 			return
 		fi
-	done <<< "${SNAPSHOTS}"
+	done <<< "${BACKUPS}"
 
-	bashio::log.info "Creating new snapshot"
-	name=$(bashio::var.json name "${SNAPSHOTNAME}")
-	bashio::api.supervisor "POST" "/snapshots/new/full" "${name}"
+	bashio::log.info "Creating new backup"
+	name=$(bashio::var.json name "${BACKUPNAME}")
+	bashio::api.supervisor "POST" "/backups/new/full" "${name}"
 }
 
 cleanup() {
-	if [ "${SNAPSHOT_KEEP_DAYS}" = "0" ]; then
+	if [ "${BACKUP_KEEP_DAYS}" = "0" ]; then
 		return
 	fi
 
@@ -36,13 +36,13 @@ cleanup() {
 			FULLNAME="$NAME (${SLUG})"
 		fi
 
-		if [ "${AGE}" -gt "${SNAPSHOT_KEEP_DAYS}" ]; then
-			bashio::log.info "Deleting snapshot ${FULLNAME}, because it is ${AGE} days old"
-			bashio::api.supervisor "DELETE" "/snapshots/${SLUG}"
+		if [ "${AGE}" -gt "${BACKUP_KEEP_DAYS}" ]; then
+			bashio::log.info "Deleting backup ${FULLNAME}, because it is ${AGE} days old"
+			bashio::api.supervisor "DELETE" "/backups/${SLUG}"
 		else
-			bashio::log.info "Skipping snapshot deletion of ${FULLNAME}, because it is only ${AGE} days old"
+			bashio::log.info "Skipping backup deletion of ${FULLNAME}, because it is only ${AGE} days old"
 		fi
-	done <<< "${SNAPSHOTS}"
+	done <<< "${BACKUPS}"
 }
 
 datediff() {
@@ -53,9 +53,9 @@ datediff() {
 
 while true; do
 	NOW=$(date -Iseconds)
-	SNAPSHOTS=$(bashio::api.supervisor "GET" "/snapshots" false ".snapshots[]")
+	BACKUPS=$(bashio::api.supervisor "GET" "/backups" false ".backups[]")
 
-	createsnapshot
+	createbackup
 	cleanup
 	sleep 3h
 done
